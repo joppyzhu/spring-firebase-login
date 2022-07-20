@@ -44,10 +44,17 @@ public class AuthService {
         String key = "";
         String deviceId = "";
         if (request != null && request.getDeviceId() != null) {
-            Optional<Device> device = deviceRepository.findByDeviceName(request.getDeviceId());
-            if (!device.isEmpty()) {
-                deviceId = device.get().getDeviceName();
-                key = device.get().getKey();
+            Optional<Device> deviceOpt = deviceRepository.findByDeviceName(request.getDeviceId());
+            if (!deviceOpt.isEmpty()) {
+                Device device = deviceOpt.get();
+                deviceId = device.getDeviceName();
+                key = device.getKey();
+                if (request.getToken() != null
+                        && !request.getToken().isEmpty()
+                        && !request.getToken().equalsIgnoreCase(device.getToken())) {
+                    device.setToken(request.getToken());
+                    deviceRepository.save(device);
+                }
             }
         }
         if (deviceId.isEmpty()) {
@@ -55,6 +62,7 @@ public class AuthService {
             key = UUID.randomUUID().toString().replace("-","");
             Device device = Device.builder()
                     .deviceName(deviceId)
+                    .token(request.getToken())
                     .key(key).build();
             deviceRepository.save(device);
         }
@@ -120,6 +128,7 @@ public class AuthService {
         }
         // Sign this device to profileId
         device.setProfileId(profile.getProfileId());
+        device.setIsActive(1);
         deviceRepository.save(device);
 
         String customToken = generateCustomToken(user.getUid(), device.getDeviceId(), profile.getProfileId(), profile.getScope());
@@ -137,7 +146,10 @@ public class AuthService {
     }
 
     public EmptyResponse logout() {
-        EmptyResponse emptyResponse = EmptyResponse.builder().build();
+        User user = securityService.getUser();
+        // Non active deviceId
+        deviceRepository.deactivateDevice(Integer.parseInt(user.getDeviceId()), Integer.parseInt(user.getProfileId()));
+
         if (securityService.getCredentials().getType() == Credentials.CredentialType.SESSION
                 && secProps.getFirebaseProps().isEnableLogoutEverywhere()) {
             try {
@@ -147,9 +159,7 @@ public class AuthService {
             }
         }
         cookieUtils.deleteSecureCookie("session");
-        emptyResponse.setMessage("success");
-        emptyResponse.setResponseCode("200");
-        return emptyResponse;
+        return EmptyResponse.builder().responseCode("200").message("success").build();
     }
 
     private String generateCustomToken(String uid, Integer deviceId, Integer profileId, String scope) {

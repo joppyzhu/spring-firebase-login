@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostAuthInitRequest {
     private String deviceId;
+    private String token;
 }

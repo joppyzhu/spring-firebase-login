@@ -26,5 +26,5 @@ public class Device implements Serializable {
     private String key;
     private Integer profileId;
     private String token;
-
+    private Integer isActive;
 }

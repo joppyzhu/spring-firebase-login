@@ -1,8 +1,10 @@
 package com.example.springfirebaselogin.controllers;
 
+import com.example.springfirebaselogin.model.request.EmptyRequest;
 import com.example.springfirebaselogin.model.request.PostUserAddRequest;
 import com.example.springfirebaselogin.model.request.PostUserSearchRequest;
 import com.example.springfirebaselogin.model.request.PostUserUpdateRequest;
+import com.example.springfirebaselogin.model.response.EmptyResponse;
 import com.example.springfirebaselogin.model.response.PostUserAddResponse;
 import com.example.springfirebaselogin.model.response.PostUserDetailResponse;
 import com.example.springfirebaselogin.model.response.PostUserSearchResponse;
@@ -39,6 +41,11 @@ public class UserController {
     @PostMapping("update")
     public PostUserUpdateResponse userUpdate(@RequestBody PostUserUpdateRequest request) {
         return userService.userUpdate(request);
+    }
+
+    @PostMapping("notif")
+    public EmptyResponse sendNotif(PostUserUpdateRequest request) {
+        return userService.sendNotif(request);
     }
 
 }

@@ -68,6 +68,6 @@ security:
   allowed-public-apis:
     - /auth/v1/init
     - /user/v1/search
-    - /test/**
+    - /user/v1/notif
   exposed-headers:
     - X-Xsrf-Token
