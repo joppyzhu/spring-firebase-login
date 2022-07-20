@@ -4,6 +4,7 @@ import com.example.springfirebaselogin.model.request.PostUserAddRequest;
 import com.example.springfirebaselogin.model.request.PostUserSearchRequest;
 import com.example.springfirebaselogin.model.request.PostUserUpdateRequest;
 import com.example.springfirebaselogin.model.response.PostUserAddResponse;
+import com.example.springfirebaselogin.model.response.PostUserDetailResponse;
 import com.example.springfirebaselogin.model.response.PostUserSearchResponse;
 import com.example.springfirebaselogin.model.response.PostUserUpdateResponse;
 import com.example.springfirebaselogin.services.UserService;
@@ -23,6 +24,11 @@ public class UserController {
     @PostMapping("search")
     public PostUserSearchResponse userSearch(@RequestBody PostUserSearchRequest request) {
         return userService.userSearch(request);
+    }
+
+    @PostMapping("detail")
+    public PostUserDetailResponse getProfileDetail() {
+        return userService.getProfile();
     }
 
     @PostMapping("insert")
