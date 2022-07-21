@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TokenScope {
+public @interface UserScope {
     UserTypes[] scope();
 }
