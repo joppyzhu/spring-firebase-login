@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -77,7 +78,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (user != null) {
             // Handle roles
             //decodedToken.getClaims().forEach((k, v) -> authorities.add(new SimpleGrantedAuthority("USER")));
-            authorities.add(new SimpleGrantedAuthority(user.getScope()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getScope()));
             // Set security context
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
                     new Credentials(type, decodedToken, token, sessionCookieValue), authorities);
@@ -97,9 +98,22 @@ public class SecurityFilter extends OncePerRequestFilter {
             user.setIssuer(decodedToken.getIssuer());
             user.setEmailVerified(decodedToken.isEmailVerified());
             Map<String, Object> claims = decodedToken.getClaims();
-            user.setDeviceId((String) claims.get("device_id"));
-            user.setProfileId((String) claims.get("profile_id"));
-            user.setScope((String) claims.get("scope"));
+            if (Objects.isNull(claims.get("device_id"))) {
+                user.setDeviceId((String) claims.get("device_id"));
+            } else {
+                user.setDeviceId("0");
+            }
+            if (Objects.nonNull(claims.get("profile_id"))) {
+                user.setProfileId((String) claims.get("profile_id"));
+            } else {
+                user.setProfileId("0");
+            }
+            if (Objects.nonNull(claims.get("scope"))) {
+                user.setScope((String) claims.get("scope"));
+            } else {
+                user.setScope(Scope.ANONYMOUS.getValue());
+            }
+
         }
         return user;
     }
