@@ -98,7 +98,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             user.setIssuer(decodedToken.getIssuer());
             user.setEmailVerified(decodedToken.isEmailVerified());
             Map<String, Object> claims = decodedToken.getClaims();
-            if (Objects.isNull(claims.get("device_id"))) {
+            if (Objects.nonNull(claims.get("device_id"))) {
                 user.setDeviceId((String) claims.get("device_id"));
             } else {
                 user.setDeviceId("0");
