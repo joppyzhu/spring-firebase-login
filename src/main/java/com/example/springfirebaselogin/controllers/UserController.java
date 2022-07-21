@@ -1,5 +1,7 @@
 package com.example.springfirebaselogin.controllers;
 
+import com.example.springfirebaselogin.filter.IsSeller;
+import com.example.springfirebaselogin.filter.IsUser;
 import com.example.springfirebaselogin.model.request.EmptyRequest;
 import com.example.springfirebaselogin.model.request.PostUserAddRequest;
 import com.example.springfirebaselogin.model.request.PostUserSearchRequest;
@@ -29,6 +31,7 @@ public class UserController {
     }
 
     @PostMapping("detail")
+    @IsUser
     public PostUserDetailResponse getProfileDetail() {
         return userService.getProfile();
     }

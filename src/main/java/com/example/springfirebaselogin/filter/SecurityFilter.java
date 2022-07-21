@@ -76,7 +76,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         // Handle roles
         if (user != null) {
             // Handle roles
-            decodedToken.getClaims().forEach((k, v) -> authorities.add(new SimpleGrantedAuthority(k)));
+            //decodedToken.getClaims().forEach((k, v) -> authorities.add(new SimpleGrantedAuthority("USER")));
+            authorities.add(new SimpleGrantedAuthority(user.getScope()));
             // Set security context
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
                     new Credentials(type, decodedToken, token, sessionCookieValue), authorities);

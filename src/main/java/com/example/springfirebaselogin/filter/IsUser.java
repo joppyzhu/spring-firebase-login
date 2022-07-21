@@ -1,12 +1,14 @@
 package com.example.springfirebaselogin.filter;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface UserScopes {
-    UserScope[] value();
+@Retention(RetentionPolicy.RUNTIME)
+@PreAuthorize("hasRole('USER') or hasRole('SELLER')")
+public @interface IsUser {
 }
