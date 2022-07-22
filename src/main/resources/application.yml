@@ -16,6 +16,7 @@ spring:
 firebase :
   type : service_account
   project-id : test-fcm-token
+  private-key :
   private-key-id : 682a16a60ce954d5908c01afc101698a6a8b6391
   client-email : firebase-adminsdk-437ho@test-fcm-token.iam.gserviceaccount.com
   client-id : 102810167527662111640
